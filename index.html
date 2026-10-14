@@ -1,0 +1,143 @@
+```javascript
+// ====================================
+// QUIZ: DIE 3. BINOMISCHE FORMEL
+// ====================================
+
+// Richtige Antworten für 10 Fragen
+const richtigeAntworten = [
+    "b", // Frage 1
+    "c", // Frage 2
+    "a", // Frage 3
+    "b", // Frage 4
+    "c", // Frage 5
+    "a", // Frage 6
+    "b", // Frage 7
+    "c", // Frage 8
+    "a", // Frage 9
+    "b"  // Frage 10
+];
+
+// Erklärungen zu den Lösungen
+const erklaerungen = [
+    "(a + b)(a - b) = a² - b²",
+    "(x + 4)(x - 4) = x² - 16",
+    "(y + 9)(y - 9) = y² - 81",
+    "z² - 25 = (z + 5)(z - 5)",
+    "(a + 12)(a - 12) = a² - 144",
+    "m² - 36 = (m + 6)(m - 6)",
+    "(3x + 2)(3x - 2) = 9x² - 4",
+    "100 - 49 = (10 + 7)(10 - 7)",
+    "(p + 3)(p - 3) = p² - 9",
+    "51 · 49 = (50 + 1)(50 - 1) = 2499"
+];
+
+// Schulnote anhand der Prozentzahl berechnen
+function berechneNote(prozent) {
+    if (prozent >= 92) return 1;
+    if (prozent >= 81) return 2;
+    if (prozent >= 67) return 3;
+    if (prozent >= 50) return 4;
+    if (prozent >= 25) return 5;
+    return 6;
+}
+
+// Quiz auswerten
+function quizAuswerten() {
+    let punkte = 0;
+    const anzahlFragen = richtigeAntworten.length;
+
+    const ergebnisBereich =
+        document.getElementById("ergebnis");
+
+    const detailsBereich =
+        document.getElementById("details");
+
+    // Vorherige Ergebnisse entfernen
+    detailsBereich.innerHTML = "";
+
+    // Alle Fragen kontrollieren
+    for (let i = 0; i < anzahlFragen; i++) {
+        const ausgewaehlt = document.querySelector(
+            `input[name="frage${i + 1}"]:checked`
+        );
+
+        const richtig =
+            ausgewaehlt &&
+            ausgewaehlt.value === richtigeAntworten[i];
+
+        if (richtig) {
+            punkte++;
+        }
+
+        // Rückmeldung für jede Frage erstellen
+        const rueckmeldung = document.createElement("p");
+
+        if (!ausgewaehlt) {
+            rueckmeldung.textContent =
+                `Frage ${i + 1}: Nicht beantwortet. ` +
+                `Richtige Lösung: ${erklaerungen[i]}`;
+        } else if (richtig) {
+            rueckmeldung.textContent =
+                `Frage ${i + 1}: Richtig! ✓`;
+        } else {
+            rueckmeldung.textContent =
+                `Frage ${i + 1}: Falsch. ` +
+                `Richtige Lösung: ${erklaerungen[i]}`;
+        }
+
+        detailsBereich.appendChild(rueckmeldung);
+    }
+
+    // Prozentzahl berechnen
+    const prozent = Math.round(
+        (punkte / anzahlFragen) * 100
+    );
+
+    // Note berechnen
+    const note = berechneNote(prozent);
+
+    // Ergebnis anzeigen
+    ergebnisBereich.innerHTML = `
+        <h2>🎉 Dein Ergebnis</h2>
+        <p><strong>Punkte:</strong> ${punkte} von ${anzahlFragen}</p>
+        <p><strong>Prozent:</strong> ${prozent} %</p>
+        <p><strong>Deine Note:</strong> ${note}</p>
+    `;
+
+    // Passende Nachricht anzeigen
+    let nachricht;
+
+    if (note === 1) {
+        nachricht = "Perfekt! Du beherrschst die Formel richtig gut!";
+    } else if (note === 2) {
+        nachricht = "Sehr gut! Du hast die Formel gut verstanden.";
+    } else if (note === 3) {
+        nachricht = "Gut gemacht! Ein bisschen Übung schadet nicht.";
+    } else if (note === 4) {
+        nachricht = "Bestanden! Übe noch ein paar Aufgaben.";
+    } else {
+        nachricht = "Wiederhole die Formel und versuche es erneut!";
+    }
+
+    ergebnisBereich.innerHTML +=
+        `<p>${nachricht}</p>`;
+
+    // Ergebnisbereich sichtbar machen
+    ergebnisBereich.style.display = "block";
+
+    // Zum Ergebnis scrollen
+    ergebnisBereich.scrollIntoView({
+        behavior: "smooth",
+        block: "start"
+    });
+}
+
+// Quiz zurücksetzen
+function quizZuruecksetzen() {
+    document.getElementById("quizForm").reset();
+
+    document.getElementById("ergebnis").style.display = "none";
+
+    document.getElementById("details").innerHTML = "";
+}
+```
